@@ -1,0 +1,24 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Отправка вопроса</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+    <div class="send_email">
+        <a class="back-link" href="{{request.META.HTTP_REFERER}}">Back</a>
+        <h1>Отправка вопроса</h1>
+        <form action="" method="POST">
+        {% csrf_token %}
+
+        <label for="subject">Тема сообщения: </label>
+        <input type="text" name="subject" id="subject" required>
+        <label for="message">Сообщение: </label>
+        <textarea name="message" id="message" required></textarea>
+        <button>Отправить</button>
+    </form>
+    </div>
+    
+    
+{% endblock %}

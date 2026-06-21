@@ -1,0 +1,17 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>My courses</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+    <a href="{% url 'courses:course_main' course_id %}">course_main</a>
+    <div>
+        <p>Ваш курс состоит из:</p>
+    {% for num,slide in slides.items %}
+    
+        <p>Name: {{slide.title}} slide: {{slide.slide}}</p>
+    {% endfor %}
+    </div>
+{% endblock %}

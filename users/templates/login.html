@@ -1,0 +1,28 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Вход в аккаунт</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+    <div class="login-box">
+        <h1>Вход в аккаунт</h1>
+        <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{field.id_for_label}}">{{field.label}}</label>
+                {{field}}
+            </div>
+            {% for error in field.errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        {% endfor %}
+        <button>Войти</button>
+    </form>
+     <a href="{% url 'users:register' %}">Нет аккаунта? Создать новый</a>
+    </div>
+    
+    
+{% endblock %}

@@ -1,0 +1,48 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Проверка ответов</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="check-answer">
+    <div class="task-info">
+        <h2>Название курса: {{practice.course.title}} </h2>
+        <h2>Название практики: {{practice.title}} </h2>
+        <h3>Жалобы пациетна</h3>
+        <h4>{{practice.complaints}}</h4>
+        <h3>Возрост пациетна</h3>
+        <h4>{{practice.age}}</h4>
+        <h3>Пол пациетна</h3>
+        <h4>{{practice.gender}}</h4>
+    </div>
+    <div class="student-answer">
+        <h3>Прописанные тесты</h3>
+        <h4>{{answer.tests}}</h4>
+        <h3>Прописанное лечение</h3>
+        <h4>{{answer.treatment}}</h4>
+    </div>
+    <div class="teacher-check">
+    <form class="teacher-check-form" action="" method="POST">
+        {% csrf_token %}
+    <div class="check-group">
+            <label for="results">Оценка ответа</label>
+            <input type="number" name="results"  min="0" max="100" required>
+        </div>
+    <div class="check-group">
+            <label for="commentary">Ваш комментарий</label>
+            <textarea name="commentary" required></textarea>
+        </div>
+
+        <div class="check-confirm">
+            <input class="btn-check" type="submit" value="Confirm" />
+        </div>
+
+    </form>
+</div>
+    
+</div>
+    
+     
+{% endblock %}

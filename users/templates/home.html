@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block title %} <title>Главная Стрница </title> {% endblock %}
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+        <p class="message">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+    <header>
+        {% if request.user.is_authenticated %}
+        <div class="user-link">
+            <a href="{% url 'users:signout' %}">Signout</a>
+            <a href="{% url 'users:user_page' %}">{{request.user.username}}</a>
+        </div>
+        
+            {% if request.user.is_teacher %}
+            <a href="{% url 'courses:create_course' %}">Создать Курс</a>
+            <a href="{% url 'courses:my_courses' %}">Мои Курсы</a>
+            {% endif %}
+        <a href="{% url 'shop:all_courses' %}">Все курсы</a>
+        <a href="{% url 'users:user_page' %}">Купленые курсы</a>
+        <a href="{% url 'shop:my_cart' %}">Моя корзина</a>
+        {% else %}
+        <a href="{% url 'users:signup' %}">Зайти</a>
+        <a href="{% url 'users:register' %}">Зарегестрироваться</a>
+        {% endif %}
+    </header>
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+   
+</body>
+</html>

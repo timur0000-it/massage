@@ -1,0 +1,28 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>публикация курса</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="course-ready">
+<form class="form-ready" action="" method="POST">
+        {% csrf_token %}
+    <div class="form__group">
+            <p>Вы уверны что хотите создат "{{obj.title}}"?</p>
+            <p class="warning">⚠ После публикации структура курса станет недоступна для редактирования.</p>
+            <label for="price">Цена курса</label>
+            <input type="number" name="price" id="price" required>
+        </div>
+
+        <div class="ready-div">
+            <input class="btn-ready" type="submit" value="Confirm" />
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
+
+               

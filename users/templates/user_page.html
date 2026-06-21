@@ -1,0 +1,78 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Страница пользователя</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="user-container">
+    <h1>Страница пользователя</h1>
+
+    
+    <div class="bought-courses">
+    <h2>Список курсов</h2>
+    {% for course in courses %}
+        <div id="{{ course.id }}" class="product">
+            <div class="course-title">Название курса: {{ course.course.title }}</div>
+            <div class="course-teacher">Учитель: {{ course.course.teacher }}</div>
+            <a href="{% url 'courses:course_start' course.course.id %}">Начать курс</a>
+            <a href="{% url 'users:send_email' course.course.id %}">Ask teacher question</a>
+        </div>
+        {% empty %}
+        <div class="empty">Пока нет курсов</div>
+    {% endfor %}
+    </div>
+    {% if finished_results %}
+    <div class="course-results">
+        <h2>Результаты курсов</h2>
+        {% for course in finished_results %}
+        <div class="real-score">
+            <div class="course-title">{{ course.course_title }}</div>
+            <div class="course-teacher">{{ course.course_teacher }}</div>
+            {% for score in course.practice_results %}
+            <p>Название задания: {{score.title}}</p>
+            <p>Результаты задания: {% if score.results != null %}  {{score.results}} {% else %} Идет проверка задания {% endif %} </p>
+            <p>Коментарий преподователя: {% if score.commentary != null %}  {{score.commentary}} {% else %} Идет проверка задания {% endif %} </p>
+            {% endfor %}
+            {% for score in course.test_results %}
+            <p>Название теста:{{score.title}}</p>
+            <p>Результаты теста: {{score.results}} | {{score.quantity}} </p>
+            {% endfor %}
+        </div>
+        {% empty %}
+        <div class="empty">Пока нет Результатов</div>
+    {% endfor %}
+    </div>
+    {% endif %}
+       
+
+    <div class="finished-courses">
+        <h2>Завершенные курсы</h2>
+        {% for course in finished_courses %}
+        <div id="{{ course.id }}" class="course-mock">
+            <div class="course-title">Название курса: {{ course.course.title }}</div>
+            <div class="course-teacher">Учитель: {{ course.course.teacher }}</div>
+            <a href="{% url 'courses:course_start' course.course.id %}">Начать пробный курс</a>
+            <a href="{% url 'users:send_email' course.course.id %}">Ask teacher question</a>
+
+            {% if course.answers %}
+        <div class="mock-results">
+        <h3>Результаты пробных тестов</h3>
+        {% for score in course.answers %}
+        <div id="{{ course.id }}" class="mock-score">
+            <div class="course-title">Название курса: {{ course.course.title }}</div>
+            <p>Название теста:{{score.test}}</p>
+            <p>Результаты теста: {{score.results}} | {{score.answers|length}} </p>
+        </div>
+         {% endfor %}
+    </div>
+    {% endif %}
+    </div>
+        {% empty %}
+        <div class="empty">Пока нет курсов</div>
+    {% endfor %}
+    </div>   
+    </div>
+    <script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}

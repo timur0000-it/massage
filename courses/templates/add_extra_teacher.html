@@ -1,0 +1,31 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Добавить учителя к курсу</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="add-extra">
+    
+    <h2>Добавить преподавателя</h2>
+<form class="form" action="" method="POST">
+    <a class="back-link" href="{{request.META.HTTP_REFERER}}">Back</a>
+        {% csrf_token %}
+    <div class="form__group">
+            <label for="extra">Добавить учителя</label>
+            <select id="extra" name="extra">
+                {% for user in users %}
+                <option value="{{user.id}}">{{user.username}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="button-extra">
+            <input class="btn-extra" type="submit" value="Confirm" />
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+

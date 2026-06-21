@@ -1,0 +1,49 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Тест</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="test-box">
+    {% if is_teacher %}
+    <div class="teacher-links">
+    <a href="{% url 'courses:course_main' test.course.id %}">Страница курса</a>
+    <a href="{% url 'courses:update_test' test.id %}">Изменить</a>
+    </div>
+    {% endif %}
+
+    <h2>Тест: {{test.title}}</h2>
+    <form action="{% url 'courses:course_test' test.id %}" method="post">
+        {% csrf_token %}
+    {% for question in test.data %}
+    <div class="test-question">
+        <label>Вопрос #{{ forloop.counter }}</label>
+        <h3>{{ question.question }}</h3>
+        <h4>Варианты ответов</h4>
+        {% for answer in question.answers %}
+        <div class="test-row">
+        <label class="answer-option">
+            <input id="right_{{ forloop.parentloop.counter }}" type="radio" name="right_{{ forloop.parentloop.counter }}" value="{{ forloop.counter }}"  required>
+             <span>{{answer}}</span>
+        </label>
+        
+        </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+{% if not is_teacher %}
+<button>Завершить Тест</button>
+{% endif %}
+    </form>
+    {% if test.slide != 0 %}
+    <div class="slide-navigation">
+        <a href="{% url 'courses:previous_slide' course_id test.slide %}">← Предыдущий</a>
+        {% if is_teacher %}
+        <a href="{% url 'courses:next_slide' course_id test.slide %}">Следующий →</a>
+        {% endif %}
+    </div>
+        {% endif %}
+</div>
+{% endblock %}

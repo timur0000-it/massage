@@ -1,0 +1,62 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>My courses</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+    <div class="teacher-courses">
+    <div class="main-box">
+        <h2>Ваши курсы</h2>
+     {% for course in courses %}
+     <div class="main-course">
+        <div class="course-title">Название курса: {{ course.title }}</div>
+            <div class="course-teacher">Учитель: {{ course.teacher }}</div>
+            <div class="course-price">Стоимость: {{ course.price }}</div>
+            <div class="course-category">Категория: {{ course.category }}</div>
+            <a href="{% url 'courses:course_main' course.id %}">Перейти к редактированию</a>
+        {% if course.answers %}
+        <h4>Ответы студентов</h4>
+        {% for answer in course.answers %}
+        <div class="student-question">
+        <h5>Ответ ученика {{answer.student.username}} на практику {{answer.practice}}</h5>
+        <a href="{% url 'courses:check_answer' answer.id %}">Проверить</a>
+        </div>
+        {% endfor %}
+        {% endif %}
+     </div>
+
+    
+    {% empty %}
+        <div class="empty">Пока нет курсов</div> 
+    {% endfor %}
+    </div>
+
+
+    <div class="extra-box">
+        <h2>Курсы других преподователей</h2>
+     {% for course in extra_courses %}
+   <div class="extra-course">
+        <div class="course-title">Название курса: {{ course.title }}</div>
+            <div class="course-teacher">Учитель: {{ course.teacher }}</div>
+            <div class="course-price">Стоимость: {{ course.price }}</div>
+            <div class="course-category">Категория: {{ course.category }}</div>
+            <a href="{% url 'courses:course_main' course.id %}">Перейти к редактированию</a>
+        {% if course.answers %}
+        <h4>Ответы студентов</h4>
+        {% for answer in course.answers %}
+        <div class="student-question">
+        <h5>Ответ ученика {{answer.student.username}} на практику {{answer.practice}}</h5>
+        <a href="{% url 'courses:check_answer' answer.id %}">Проверить</a>
+        </div>
+        {% endfor %}
+        {% endif %}
+     </div>
+    {% empty %}
+        <div class="empty">Пока нет курсов других преподователей</div> 
+    {% endfor %}
+    </div>
+    </div>
+    
+{% endblock %}

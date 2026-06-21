@@ -1,0 +1,40 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>My courses</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+        <a href="{{request.META.HTTP_REFERER}}">Back</a>
+
+    <form action="" method="post">
+        <input type="text" name="title" id="" value="{{ test.title }}">Название теста
+        {% csrf_token %}
+       {% for question in test.data %}
+    <div>
+        <label>Вопрос {{ forloop.counter }}</label>
+        <input type="text"
+               name="{{ forloop.counter }}"
+               value="{{ question.question }}">
+
+        <p>Варианты ответов</p>
+
+        {% for answer in question.answers %}
+            <input type="text"
+                   name="answer_{{ forloop.parentloop.counter }}"
+                   value="{{ answer }}">
+
+            <input type="radio"
+                   name="right_{{ forloop.parentloop.counter }}"
+                   value="{{ forloop.counter }}"
+                   {% if question.right == forloop.counter %}checked{% endif %}>
+
+            Правильный ответ
+            <br>
+        {% endfor %}
+    </div>
+{% endfor %}
+        <button>Перезаписать Тест</button>
+    </form>
+{% endblock %}

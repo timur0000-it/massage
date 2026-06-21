@@ -1,0 +1,28 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>My courses</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="video-box">
+    {% if is_teacher %}
+    <div class="teacher-links">
+    <a href="{% url 'courses:course_main' video.course.id %}">Страница курса</a>
+    <a href="{% url 'courses:update_video' video.id %}">Изменить</a>
+    </div>
+    
+    {% endif %}
+
+    <h2>{{video.title}}</h2>
+    <video controls src="{{ video.video.url }}" type="video/mp4"></video>
+    {% if video.slide != 0 %}
+    <div class="slide-navigation">
+     <a href="{% url 'courses:previous_slide' course_id video.slide %}">← Предыдущий</a>
+    <a href="{% url 'courses:next_slide' course_id video.slide %}">Следующий →</a>
+   
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

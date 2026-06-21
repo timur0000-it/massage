@@ -1,0 +1,29 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Текст</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="text-box">
+    {% if is_teacher %}
+    <div class="teacher-links">
+    <a href="{% url 'courses:course_main' text.course.id %}">Страница курса</a>
+    <a href="{% url 'courses:update_text' text.id %}">Изменить</a>
+    </div>
+    {% endif %}
+    <div class="text-info">
+        <h2>{{text.title}}</h2>
+        <h4>{{text.description|linebreaks}}</h4>
+    </div>
+    
+    {% if text.slide != 0 %}
+     <div class="slide-navigation">
+        <a href="{% url 'courses:previous_slide' course_id text.slide %}">← Предыдущий</a>
+        <a href="{% url 'courses:next_slide' course_id text.slide %}">Следующий →</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

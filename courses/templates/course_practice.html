@@ -1,0 +1,58 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Практическое задание</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="practice-box">
+     {% if is_teacher %}
+    <div class="teacher-links">
+    <a href="{% url 'courses:course_main' practice.course.id %}">Страница курса</a>
+    <a href="{% url 'courses:update_practice' practice.id %}">Изменить</a>
+    </div>
+    {% endif %}
+    <div class="practice-info">
+        <h2>{{practice.title}}</h2>
+        <h3>Жалобы пациетна</h3>
+        <h4>{{practice.complaints}}</h4>
+        <h3>Возрост пациетна</h3>
+        <h4>{{practice.age}}</h4>
+        <h3>Пол пациетна</h3>
+        <h4>{{practice.gender}}</h4>
+    </div>
+    
+
+    <div class="practice-answer">
+    <form action="{% url 'courses:course_practice' practice.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{field.id_for_label}}">{{field.label}}</label>
+                {{field}}
+            </div>
+        {% endfor %}
+         {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{error}}
+            </div>
+            {% endfor %}
+        {% if not is_teacher and not is_finished %}
+        <button>Завершить задание</button>
+        {% endif %}
+        </form>
+        {% if practice.slide != 0 %}
+        </div>
+        <div class="slide-navigation">
+        <a href="{% url 'courses:previous_slide' course_id practice.slide %}">← Предыдущий</a>
+        {% if is_teacher or is_finished %}
+        <a href="{% url 'courses:next_slide' course_id practice.slide %}">Следующий →</a>
+        {% endif %}
+        
+        </div>
+        {% endif %}
+</div>
+   
+    
+{% endblock %}

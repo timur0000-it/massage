@@ -1,0 +1,28 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Моя Корзина</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="cart-container">
+    
+    <h1>Моя Корзина</h1>
+    {% for course in my_courses %}
+        <div class="cart-product">
+        
+        <div class="course-title">Название курса:{{ course.course.title }}</div>
+        <div class="course-teacher">teacher: {{ course.course.teacher }}</div>
+        <a href="/shop/delete_cart/{{ course.course.id }}">Удалить полностью</a>                       
+        </div>
+    {% empty %}
+        <div class="empty">Пока нет товаров</div>
+    {% endfor %}
+   <div>
+        <div class="full-price">Стоимость всех товаров - {{ money }} </div>
+    </div>
+    <a class="pay-btn" href="/shop/create_order">Перейти к оплате</a>
+</div>
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}

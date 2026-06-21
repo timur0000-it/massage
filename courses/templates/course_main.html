@@ -1,0 +1,104 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>My courses</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="course-page-container">
+    <div class="teacher-controls">
+        <h1>Владелец курса {{course.teacher}}</h1>
+        <h1>{{course.title}}</h1>
+        {% if course.ready == False %}
+        <a href="{% url 'courses:update_course' course.id %}">Редактировать курс</a>
+        <a href="{% url 'courses:create_test' course.id %}">Создать Тест</a>
+        <a href="{% url 'courses:create_text' course.id %}">Создать Текст</a>
+        <a href="{% url 'courses:create_video' course.id %}">Создать Видео</a>
+        <a href="{% url 'courses:create_practice' course.id %}">Создать Практику</a>
+        {% endif %}
+        <a href="{% url 'courses:add_extra_teacher' course.id %}">Добавить учителя</a>
+    </div>
+    
+    <div class="extra-teachers">
+        <h3>Дополнительные учителя</h3>
+        {% for teacher in course.extra_teachers.all %}
+        <h3>{{teacher.username}}</h3>
+         {% empty %}
+        <div class="empty">Вы едиственный учитель этого курса</div> 
+        {% endfor %}
+    </div>
+    {% if videos or texts or tests or practices %}
+    <div class="course-content">
+        <h3>Ваши слайды которые не находятся в курсе</h3>
+        {% for video in videos %}
+        <div class="content-item">
+        <span class="title">🎥 {{ video.title }}</span>
+        <a class="btn-view" href="{% url 'courses:course_video' video.id %}">Открыть</a>
+        {% if course.ready == False %}<a class="btn-add" href="{% url 'courses:add_slide' 'video' video.id %}">Добавить</a> 
+        {% endif %} <a class="btn-delete" href="{% url 'courses:delete_video' video.id %}">Удалить</a>
+        <a class="btn-edit" href="{% url 'courses:update_video' video.id %}">Изменить</a>
+        </div>
+        {% endfor %}
+        {% for text in texts %}
+        <div class="content-item">
+        <span class="title">📖 {{ text.title }}</span>
+        <a  class="btn-view" href="{% url 'courses:course_text' text.id %}">Открыть</a> 
+        {% if course.ready == False %} <a class="btn-add" href="{% url 'courses:add_slide' 'text' text.id %}">Добавить</a> 
+        {% endif %} <a class="btn-delete" href="{% url 'courses:delete_text' text.id %}">Удалить</a>
+        <a class="btn-edit" href="{% url 'courses:update_text' text.id %}">Изменить</a> 
+        </div>
+        {% endfor %}
+    
+        {% for test in tests %}
+        <div class="content-item">
+        <span class="title"> ✏{{ test.title }}</span>  
+        <a class="btn-view" href="{% url 'courses:course_test' test.id %}">Открыть</a> 
+        {% if course.ready == False %} <a class="btn-add" href="{% url 'courses:add_slide' 'test' test.id %}">Добавить</a>
+        {% endif %} <a class="btn-delete" href="{% url 'courses:delete_test' test.id %}">Удалить</a>
+        <a class="btn-edit" href="{% url 'courses:update_test' test.id %}">Изменить</a> 
+        </div>
+        {% endfor %}
+        {% for practice in practices %}
+        <div class="content-item">
+        <span class="title"> 📝{{ practice.title }}</span>  
+        <a class="btn-view" href="{% url 'courses:course_practice' practice.id %}">Открыть</a> 
+        {% if course.ready == False %} <a class="btn-add" href="{% url 'courses:add_slide' 'practice' practice.id %}">Добавить</a>
+        {% endif %} <a class="btn-delete" href="{% url 'courses:delete_practice' practice.id %}">Удалить</a>
+        <a class="btn-edit" href="{% url 'courses:update_practice' practice.id %}">Изменить</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="course-content">
+        <h3>Ваши слайды которые не находятся в курсе</h3>
+        <div class="empty">Пока слайдов нет</div> 
+    </div>
+    
+    {% endif %}
+
+    <div class="finish-course">
+        <H3>Ваш курс состоит из:</H3>
+    {% for num,slide in slides.items %}
+    <div class="slide-item">
+    <span>Name: {{slide.title}}. Slide #{{slide.slide}}</span>
+    {% if course.ready == False %} 
+    <a href="{% url 'courses:delete_slide' course.id slide.slide %}">Удалить</a> 
+    {% endif %}
+    </div>
+     {% empty %}
+    <div class="empty">Пока слайдов нет</div> 
+    {% endfor %}
+    
+    
+    <br>
+    <a href="{% url 'courses:course_start' course.id %}">Проверить курс</a>
+    {% if course.ready == False %}
+    <a href="{% url 'courses:course_ready' course.id %}">Создать курс</a>
+    {% else %}
+    <a href="{% url 'courses:course_not_ready' course.id %}">Снять курс</a>
+    {% endif %}
+    </div>
+</div>
+  
+{% endblock %}

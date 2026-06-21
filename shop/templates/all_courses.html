@@ -1,0 +1,43 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Список товаров</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+
+<div class="container-shop">
+    <h1>Список товаров</h1>
+    <div class="search">
+        <form method="post">
+        {% csrf_token %}
+        <input name="title" type="text">
+        <button>Найти</button>
+    </form>
+    </div>
+    {% for course in all_courses %}
+        <div id="{{ course.id }}" class="shop-product">
+            <div class="course-title">Название курса: {{ course.title }}</div>
+            <div class="course-teacher">Учитель: {{ course.teacher }}</div>
+            <div class="course-price">Стоимость: {{ course.price }}</div>
+            <div class="course-category">Категория: {{ course.category }}</div>
+            {% if course not in student_courses and course not in cart_courses and course.teacher != request.user and course not in extra_courses %}
+                 <button  class="btn" data-url ="{% url 'shop:add_cart' course.id %}">
+                ➕
+            </button>
+        {% elif course in student_courses %}
+        <div class="have">Уже куплено</div>
+        {% elif course in cart_courses %}
+        <div class="in-cart">Уже в корзине</div>
+        {% elif course.teacher == request.user or course in extra_courses %}
+        <a href="{% url 'courses:course_main' course.id %}">Редактировать</a> 
+        {% endif %}
+        </div>
+    {% empty %}
+        <div class="empty">Пока нет курсов</div>
+        
+    {% endfor %}
+    </div>
+    <script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}

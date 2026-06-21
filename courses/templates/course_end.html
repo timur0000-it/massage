@@ -1,0 +1,26 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Конец курса</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="course-end">
+    <div class="success-icon">✓</div>
+    <h2>Поздравляем вас с завершением курса</h2>
+    <h1>{{course.title}}</h1>
+    <p>Учителя {{course.teacher}}</p>
+    <div class="slide-navigation">
+        <a href="{% url 'courses:previous_slide' course.id course_slide  %}">Previous</a>
+    {% if not is_teacher and not is_finished %}
+    <a href="{% url 'courses:course_finish' course.id   %}">Завершить Курс</a>
+    {% elif is_finished %}
+    <a href="{% url 'users:user_page' %}">Завершить просмотр</a>
+    {% else %}
+    <a href="{% url 'courses:course_main' course.id %}">Страница курса</a>
+    {% endif %}
+    </div>
+    
+</div>
+{% endblock %}

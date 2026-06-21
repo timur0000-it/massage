@@ -1,0 +1,15 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Начало курса</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="course-start">
+    <h2>Добро пожаловать на курс</h2>
+    <h1>{{course.title}}</h1>
+    <p>Учителя {{course.teacher}}</p>
+    <a href="{% url 'courses:next_slide' course.id 0 %}">Начать обучение →</a>
+</div>
+{% endblock %}

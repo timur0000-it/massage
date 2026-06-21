@@ -1,0 +1,27 @@
+
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %} <title>Cоздание</title>  {% endblock %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
+
+{% block content %}
+    <div class="creation-container">
+    <a class="back-link" href="{{request.META.HTTP_REFERER}}">Back</a>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{field.id_for_label}}">{{field.label}}</label>
+                {{field}}
+            </div>
+        {% endfor %}
+         {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{error}}
+            </div>
+            {% endfor %}
+        <button>Создать</button>
+    </form>
+        </div>
+{% endblock %}
