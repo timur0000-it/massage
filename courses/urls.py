@@ -6,6 +6,7 @@ urlpatterns = [
     path('create_test/<int:course_id>/', create_test,name='create_test'),
     path('create_course/', create_course,name='create_course'),
     path('course_main/<int:course_id>/', course_main,name='course_main'),
+    path('delete_course/<int:pk>/', delete_course,name='delete_course'),
     path('check_answer/<int:answer_id>/', check_answer,name='check_answer'),
     path('course_start/<int:course_id>/', course_start,name='course_start'),
     path('course_ready/<int:course_id>/', course_ready,name='course_ready'),

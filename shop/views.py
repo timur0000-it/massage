@@ -49,7 +49,7 @@ def add_cart(request,course_id):
         cart = Cart.objects.create(user=request.user,course=course)
         return JsonResponse({'status': 'ok', 'course_id': course_id})
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def delete_cart(request,course_id):
     course = Course.objects.get(id=course_id)
     cart = Cart.objects.filter(user=request.user,course=course).first()
@@ -59,7 +59,7 @@ def delete_cart(request,course_id):
 
 
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def create_order(request):
     user = request.user
     cart_items  = Cart.objects.filter(user=request.user)

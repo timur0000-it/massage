@@ -48,7 +48,7 @@ def signout(request):
     logout(request)
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def send_email(request,course_id):
     course = Course.objects.filter(id=course_id).first()
     if request.method == "POST":

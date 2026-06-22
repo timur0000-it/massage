@@ -46,7 +46,24 @@ def update_course(request,pk):
             messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
     return render(request,'creation_form.html',{'form':form})
 
-@login_required(login_url='user:signup')
+
+@login_required(login_url='users:signup')
+def delete_course(request,pk):
+    course = Course.objects.filter(id=pk).first()
+    if not course:
+        return redirect('users:user_page')
+    if request.user != course.teacher and request.user not in course.extra_teachers.all():
+        messages.error(request, 'У вас нет прав')
+        return redirect('users:user_page')
+    if Practice_answers.objects.filter(course=course, results__isnull=True).exists():
+            messages.error(request,'Нужно проверить все ответы перед тем как удалить курс')
+            return redirect('courses:my_courses')
+    course.delete()
+    messages.success(request, 'Курс успешно удалён')
+    return redirect('courses:my_courses')
+
+
+@login_required(login_url='users:signup')
 def my_courses(request):
     user = request.user
     extra_courses = user.extra_courses.all()
@@ -69,7 +86,7 @@ def my_courses(request):
         messages.error(request, 'У вас нет прав')
         return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_main(request,course_id):
     course = Course.objects.filter(id=course_id).first()
     if request.user != course.teacher and request.user not in course.extra_teachers.all():
@@ -101,7 +118,7 @@ def course_main(request,course_id):
 
 
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def add_slide(request,word,pk):
     if word == 'video':
         video = Video_course.objects.filter(id=pk).first()
@@ -153,7 +170,7 @@ def add_slide(request,word,pk):
             return redirect('courses:course_main',course_id=course.id)
     return render(request,'course_main.html',course_id=course.id)
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def delete_slide(request,course_id,slide):
         course = Course.objects.filter(id=course_id).first()
         if request.user != course.teacher and request.user not in course.extra_teachers.all():
@@ -229,7 +246,7 @@ def reorder_slides(course, slide_num):
         slide__gt=slide_num
     ).update(slide=F('slide') - 1)
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def next_slide(request,course_id,slide):
     course = Course.objects.filter(id=course_id).first()
     is_teacher = is_teacher = request.user == course.teacher or request.user in course.extra_teachers.all()
@@ -255,7 +272,7 @@ def next_slide(request,course_id,slide):
     elif practice:
         return redirect('courses:course_practice' ,pk=practice.id)
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def previous_slide(request,course_id,slide):
     course = Course.objects.filter(id=course_id).first()
     is_teacher = is_teacher = request.user == course.teacher or request.user in course.extra_teachers.all()
@@ -285,7 +302,7 @@ def previous_slide(request,course_id,slide):
 
 
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def create_test(request,course_id):
     numbers = range(1,11)
     numbers2 = range(1,5)
@@ -306,7 +323,7 @@ def create_test(request,course_id):
         return redirect('courses:course_main',course_id=course.id)
     return render(request,'create_test.html',{'numbers':numbers,'numbers2':numbers2})
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def create_text(request,course_id):
     course = Course.objects.filter(id=course_id).first()
     if request.user != course.teacher and request.user not in course.extra_teachers.all():
@@ -322,7 +339,7 @@ def create_text(request,course_id):
             return redirect('courses:course_main',course_id=course.id)
     return render(request,'creation_form.html',{'form':form})
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def create_video(request,course_id):
     course = Course.objects.filter(id=course_id).first()
     if request.user != course.teacher and request.user not in course.extra_teachers.all():
@@ -339,7 +356,7 @@ def create_video(request,course_id):
 
     return render(request,'creation_form.html',{'form':form})
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def create_practice(request,course_id):
     course = Course.objects.filter(id=course_id).first()
     if request.user != course.teacher and request.user not in course.extra_teachers.all():
@@ -357,7 +374,7 @@ def create_practice(request,course_id):
 
 
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def update_text(request,pk):
     text = Text_course.objects.filter(id=pk).first()
     if request.user != text.course.teacher and request.user not in text.course.extra_teachers.all():
@@ -375,7 +392,7 @@ def update_text(request,pk):
             messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
     return render(request,'creation_form.html',{'form':form})
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def update_practice(request,pk):
     practice = Practice_course.objects.filter(id=pk).first()
     if request.user != practice.course.teacher and request.user not in practice.course.extra_teachers.all():
@@ -394,7 +411,7 @@ def update_practice(request,pk):
     return render(request,'creation_form.html',{'form':form})
 
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def update_video(request,pk):
     video = Video_course.objects.filter(id=pk).first()
     form = VideoForm(instance=video)
@@ -412,7 +429,7 @@ def update_video(request,pk):
             messages.error(request, 'Пожалуйста, исправьте ошибки в форме.')
     return render(request,'creation_form.html',{'form':form})
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def update_test(request,pk):
     test = Test_course.objects.filter(id=pk).first()
     if request.user != test.course.teacher and request.user not in test.course.extra_teachers.all():
@@ -433,7 +450,7 @@ def update_test(request,pk):
         return redirect('courses:course_main',course_id=test.course.id)
     return render(request,'update_test.html',{'test':test})
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_video(request,pk):
     video = Video_course.objects.filter(id=pk).first()
     is_teacher = is_teacher = request.user == video.course.teacher or request.user in video.course.extra_teachers.all()
@@ -446,7 +463,7 @@ def course_video(request,pk):
         return render(request,'course_video.html',{'video':video,'course_id':video.course.id,'is_teacher':is_teacher})
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_test(request,pk):
     test = Test_course.objects.filter(id=pk).first()
     right_answers=[]
@@ -478,7 +495,7 @@ def course_test(request,pk):
     
 
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_text(request,pk):
     text = Text_course.objects.filter(id=pk).first()
     is_teacher = is_teacher = request.user == text.course.teacher or request.user in text.course.extra_teachers.all()
@@ -490,7 +507,7 @@ def course_text(request,pk):
         return render(request,'course_text.html',{'text':text,'course_id':text.course.id,'is_teacher':is_teacher})
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_practice(request,pk):
     practice = Practice_course.objects.filter(id=pk).first()
     form = Practice_StudentForm()
@@ -519,7 +536,7 @@ def course_practice(request,pk):
         return render(request,'course_practice.html',{'practice':practice,'form':form,'course_id':practice.course.id,'is_teacher':is_teacher,'is_finished':is_finished})
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def delete_video(request,pk):
     video = Video_course.objects.filter(id=pk).first()
     if request.user != video.course.teacher and request.user not in video.course.extra_teachers.all():
@@ -530,7 +547,7 @@ def delete_video(request,pk):
         return redirect('courses:course_main',course_id=video.course.id)
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def delete_test(request,pk):
     test = Test_course.objects.filter(id=pk).first()
     if request.user != test.course.teacher and request.user not in test.course.extra_teachers.all():
@@ -541,7 +558,7 @@ def delete_test(request,pk):
         return redirect('courses:course_main',course_id=test.course.id)
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def delete_text(request,pk):
     text = Text_course.objects.filter(id=pk).first()
     if request.user != text.course.teacher and request.user not in text.course.extra_teachers.all():
@@ -552,7 +569,7 @@ def delete_text(request,pk):
         return redirect('courses:course_main',course_id=text.course.id)
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def delete_practice(request,pk):
     practice = Practice_course.objects.filter(id=pk).first()
     if request.user != practice.course.teacher and request.user not in practice.course.extra_teachers.all():
@@ -563,7 +580,7 @@ def delete_practice(request,pk):
         return redirect('courses:course_main',course_id=practice.course.id)
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_start(request,course_id):
     course = Course.objects.filter(id=course_id).first()
     is_teacher = request.user == course.teacher or request.user in course.extra_teachers.all()
@@ -576,7 +593,7 @@ def course_start(request,course_id):
     return redirect('users:user_page')
 
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_finish(request,course_id):
     user = request.user
     course = Course.objects.filter(id=course_id).first()
@@ -603,7 +620,7 @@ def course_finish(request,course_id):
     print(3)
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup') 
+@login_required(login_url='users:signup') 
 def course_end(request,course_id):
     course = Course.objects.filter(id=course_id).first()
     is_teacher = request.user == course.teacher or request.user in course.extra_teachers.all()
@@ -617,7 +634,7 @@ def course_end(request,course_id):
         return render(request,'course_end.html',{'course':course,'course_slide':course_slide,'is_teacher':is_teacher,'is_finished':is_finished})
     return redirect('users:user_page')
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_ready(request,course_id):
     course = Course.objects.filter(id=course_id).first()
 
@@ -641,7 +658,7 @@ def course_ready(request,course_id):
     return render(request,'course_ready.html',{"obj":course})
 
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def add_extra_teacher(request,course_id):
     user = request.user
     course = Course.objects.filter(id=course_id).first()
@@ -657,7 +674,7 @@ def add_extra_teacher(request,course_id):
         return redirect('courses:course_main',course_id=course_id)
     return render(request,'add_extra_teacher.html',{"users":users})
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def course_not_ready(request,course_id):
     course = Course.objects.filter(id=course_id).first()
     if request.user != course.teacher and request.user not in course.extra_teachers.all():
@@ -670,7 +687,7 @@ def course_not_ready(request,course_id):
             messages.success(request, f'Проект "{course.title}" был снят')
             return redirect('courses:course_main',course_id=course_id)
 
-@login_required(login_url='user:signup')
+@login_required(login_url='users:signup')
 def check_answer(request,answer_id):
     answer = Practice_answers.objects.filter(id=answer_id).first()
     if answer:

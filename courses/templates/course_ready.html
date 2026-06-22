@@ -10,7 +10,7 @@
 <form class="form-ready" action="" method="POST">
         {% csrf_token %}
     <div class="form__group">
-            <p>Вы уверны что хотите создат "{{obj.title}}"?</p>
+            <p>Вы уверны что хотите создать "{{obj.title}}"?</p>
             <p class="warning">⚠ После публикации структура курса станет недоступна для редактирования.</p>
             <label for="price">Цена курса</label>
             <input type="number" name="price" id="price" required>
