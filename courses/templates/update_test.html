@@ -6,14 +6,16 @@
 {% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endblock %}
 
 {% block content %}
-        <a href="{{request.META.HTTP_REFERER}}">Back</a>
+<div class="update-test-box">
 
-    <form action="" method="post">
+
+    <form class="update-test" action="" method="post">
+        <a href="{{request.META.HTTP_REFERER}}">Back</a>
         <input type="text" name="title" id="" value="{{ test.title }}">Название теста
         {% csrf_token %}
        {% for question in test.data %}
-    <div>
-        <label>Вопрос {{ forloop.counter }}</label>
+    <div class="update-answer">
+        <label for="{{ forloop.counter }}">Вопрос {{ forloop.counter }}</label>
         <input type="text"
                name="{{ forloop.counter }}"
                value="{{ question.question }}">
@@ -21,20 +23,23 @@
         <p>Варианты ответов</p>
 
         {% for answer in question.answers %}
+        <div class="update-row">
             <input type="text"
                    name="answer_{{ forloop.parentloop.counter }}"
                    value="{{ answer }}">
-
-            <input type="radio"
+            <label class="radio-update">
+                <input type="radio"
                    name="right_{{ forloop.parentloop.counter }}"
                    value="{{ forloop.counter }}"
                    {% if question.right == forloop.counter %}checked{% endif %}>
-
             Правильный ответ
-            <br>
+            </label>
+        </div>
         {% endfor %}
     </div>
 {% endfor %}
         <button>Перезаписать Тест</button>
     </form>
+</div>
+        
 {% endblock %}

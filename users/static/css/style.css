@@ -2146,3 +2146,134 @@ main {
 .mock-results{
     margin-top: 40px;
 }
+
+.update-test-box{
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.update-test{
+    width: 100%;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+.update-test > a{
+    display: inline-block;
+    text-decoration: none;
+    color: #6d5437;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.update-test > input[type="text"]{
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.update-answer {
+    background: #faf8f4;
+    border-left: 5px solid #b89665;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.update-answer > label {
+    display: block;
+    margin-bottom: 10px;
+    color: #6d5437;
+    font-weight: 600;
+}
+
+.update-answer > input[type="text"]{
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.update-answer p{
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.update-row{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.update-row input[type="text"]{
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.radio-update{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.radio-update input{
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.update-test button{
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #b89665;
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.update-test button:hover{
+    background: #98764a;
+}
+
+.update-test input:focus{
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79,70,229,.15);
+}
+
+@media (max-width:700px){
+
+    .update-row{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .radio-update{
+        justify-content: flex-start;
+    }
+
+    .update-test{
+        padding: 20px;
+    }
+}

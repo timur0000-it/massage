@@ -19,14 +19,15 @@ def all_courses(request):
     user = request.user
     if request.method =='POST':
         title = request.POST.get('title').strip()
+        student_courses =  [table.course for table in Student_course.objects.filter(student = request.user)] 
+        cart_courses =  [table.course for table in Cart.objects.filter(user = request.user)] 
+        extra_courses =  user.extra_courses.all()
         all_courses = Course.objects.filter(title__icontains=title,ready=True)
     else:
         student_courses =  [table.course for table in Student_course.objects.filter(student = request.user)] 
         cart_courses =  [table.course for table in Cart.objects.filter(user = request.user)] 
         extra_courses =  user.extra_courses.all()
-        print(extra_courses)
         all_courses = Course.objects.filter(ready=True)
-        print(all_courses)
     return render(request,'all_courses.html',{'all_courses':all_courses,'student_courses':student_courses,'cart_courses':cart_courses,'extra_courses':extra_courses})
 
 @login_required(login_url='users:signup')
